@@ -101,4 +101,26 @@ public class testDao {
         System.out.println("userByName: " +userByName);
     }
 
+
+    @Test
+    public void DaoTest08() throws IOException {
+        List<String> usernames = new ArrayList<String>();
+        usernames.add("aaa");
+        usernames.add("bb");
+        usernames.add("cc");
+
+        List<User> userByName = userDao.findUserByNames2(usernames);
+        System.out.println("userByName: " +userByName);
+    }
+    @Test
+    public void DaoTest09() throws IOException {
+        List<String> usernames = new ArrayList<String>();
+        usernames.add("aaa");
+        usernames.add("bb");
+        usernames.add("cc");
+
+        List<User> userByName = userDao.findUserByNames2(usernames);
+        System.out.println("userByName: " +userByName);
+    }
+
 }
