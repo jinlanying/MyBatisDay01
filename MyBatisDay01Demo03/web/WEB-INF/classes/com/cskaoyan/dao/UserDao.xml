@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.dao.UserDao">
+    <select id="findUserById" parameterType="int" resultType="user">
+        SELECT * from user where id = #{id};
+    </select>
+
+    <select id="findUserByName" parameterType="string" resultType="user">
+    SELECT * from user
+    <where>
+        1=1
+        <if test="_parameter != null and !_parameter.isEmpty()">
+            and username like #{name}
+        </if>
+    </where>;
+</select>
+
+    <select id="findUserByNames" resultType="user">
+        SELECT * from user
+        <where>
+            <if test="_parameter != null and !_parameter.isEmpty()">
+                <foreach collection="list" item="username">
+                    or username= #{username}
+                </foreach>
+            </if>
+        </where>;
+    </select>
+
+    <select id="findUserByNames2" parameterType="list" resultType="user">
+        SELECT * from user
+        <where>
+            username IN
+            <if test="_parameter != null and !_parameter.isEmpty()">
+                <foreach collection="list" item="username" open="(" separator="," close=")" >
+                    #{username}
+                </foreach>
+            </if>
+        </where>;
+    </select>
+
+    <resultMap type="result" id="rsmap" >
+        <result property="r1" column="username"/>
+        <result property="r2" column="email"/>
+        <result property="r3" column="image"/>
+    </resultMap>
+
+    <select id="findUserById2" parameterType="int" resultMap="rsmap">
+        SELECT id,username,password,email,image from user where id=#{id};
+    </select>
+
+    <select id="findPasswordByUsername" parameterType="string" resultType="user">
+        SELECT * from user where username = #{username};
+    </select>
+
+    <select id="findUserByPasswordAndUsername" parameterType="hashmap" resultType="user">
+        SELECT * from user where username = #{username} and password=#{password};
+    </select>
+
+    <!--标签为insert的时候必须commit-->
+    <insert id="insertUser" parameterType="user">
+        <!--主键是uuid-->
+        <!--<selectKey keyProperty="id" resultType="int" order="BEFORE">-->
+            <!--SELECT UUID();-->
+        <!--</selectKey>-->
+        INSERT into user value(#{id},#{username},#{password},#{email},#{image});
+    </insert>
+
+
+
+    <delete id="deleteUserById" parameterType="user">
+        DELETE from user where id = #{id};
+    </delete>
+
+    <update id="updateUserById" parameterType="user">
+        UPDATE USER SET username=#{username} where id=#{id};
+    </update>
+</mapper>
